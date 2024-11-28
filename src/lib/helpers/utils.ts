@@ -17,6 +17,7 @@ export function setSvgBaseProps(svg: SVGElement) {
   svg.setAttribute('height', '1em')
   svg.setAttribute('fill', 'currentColor')
   svg.setAttribute('aria-hidden', 'true')
+  svg.setAttribute('focusable', 'false')
 }
 
 export function toArray(target: unknown) {

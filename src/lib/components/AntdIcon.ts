@@ -14,6 +14,7 @@ import {
   twoToneColorPalette,
 } from '../helpers/twoToneColor'
 import { anticonStyle } from './style/anticon'
+import { setSvgBaseProps } from '../helpers/utils'
 
 setTwoToneColor(blue.primary!)
 
@@ -60,12 +61,8 @@ export abstract class AntdIcon extends LitElement {
   }
 
   protected initialSvg(svg: SVGElement, name: string) {
+    setSvgBaseProps(svg)
     svg.setAttribute('data-icon', name)
-    svg.setAttribute('width', '1em')
-    svg.setAttribute('height', '1em')
-    svg.setAttribute('fill', 'currentColor')
-    svg.setAttribute('aria-hidden', 'true')
-    svg.setAttribute('focusable', 'false')
   }
 
   protected generate(node: AbstractNode) {

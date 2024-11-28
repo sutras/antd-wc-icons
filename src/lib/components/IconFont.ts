@@ -3,10 +3,9 @@ import { property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 import { styleMap } from 'lit/directives/style-map.js'
-import { createRef, ref } from 'lit/directives/ref.js'
 import ScriptLoader from '../helpers/ScriptLoader'
 import Publisher from '../helpers/Publisher'
-import { toArray } from '../helpers/utils'
+import { setSvgBaseProps, toArray } from '../helpers/utils'
 
 export interface CustomIconOptions {
   scriptUrl?: string | string[]
@@ -56,20 +55,26 @@ export default function create(options: CustomIconOptions = {}) {
     @property({ type: Number })
     rotate?: number
 
-    protected svg = createRef<SVGElement>()
+    protected svg: SVGElement
+
+    constructor() {
+      super()
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      setSvgBaseProps(svg)
+      this.svg = svg
+    }
 
     protected currentSymbol?: string
 
     protected setSvg(symbolId?: string) {
       if (symbolId && this.currentSymbol !== symbolId) {
-        const svg = this.svg.value!
         const symbol = document.querySelector(`#${symbolId}`)
         if (symbol) {
           const viewBox = symbol.getAttribute('viewBox')
           if (viewBox) {
-            svg.setAttribute('viewBox', viewBox)
+            this.svg.setAttribute('viewBox', viewBox)
           }
-          svg.innerHTML = symbol.innerHTML
+          this.svg.innerHTML = symbol.innerHTML
           this.currentSymbol = symbolId
         }
       }
@@ -117,14 +122,7 @@ export default function create(options: CustomIconOptions = {}) {
             transform: this.rotate ? `rotate(${this.rotate}deg)` : null,
           })}
         >
-          <svg
-            ${ref(this.svg)}
-            width="1em"
-            height="1em"
-            fill="currentColor"
-            aria-hidden="true"
-            focusable="false"
-          ></svg>
+          ${this.svg}
         </span>
       `
     }
